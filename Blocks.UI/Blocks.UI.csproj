@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{86D26680-6726-457F-A5C8-6B508FC4D697}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>Blocks</RootNamespace>
-    <AssemblyName>Blocks</AssemblyName>
+    <ProjectGuid>{0305B973-047D-4347-A07A-D2CB4C7E64F6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Blocks.UI</RootNamespace>
+    <AssemblyName>Blocks.UI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,6 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
@@ -44,7 +47,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -54,7 +56,6 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BulletSharp, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -88,16 +89,21 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="Controls\ComponentControl.xaml.cs">
+      <DependentUpon>ComponentControl.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Controls\InspectorControl.xaml.cs">
+      <DependentUpon>InspectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NodeViewModel.cs" />
+    <Compile Include="Controls\ProjectTreeControl.xaml.cs">
+      <DependentUpon>ProjectTreeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="Windows\CreateProjectWindow.xaml.cs">
+      <DependentUpon>CreateProjectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -111,6 +117,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Windows\ProjectViewModel.cs" />
+    <Compile Include="Windows\ProjectWindow.xaml.cs">
+      <DependentUpon>ProjectWindow.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -122,20 +132,59 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <Page Include="Controls\ComponentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\InspectorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProjectTreeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CreateProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Blocks.Core\Blocks.Core.csproj">
       <Project>{6c0c144c-be70-4912-9840-9444c53535d9}</Project>
       <Name>Blocks.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Blocks.ECS\Blocks.ECS.csproj">
+      <Project>{9F5AC5A7-AF1E-42DA-93CC-4AC65532C2CD}</Project>
+      <Name>Blocks.ECS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.Hierarchy\Blocks.Hierarchy.csproj">
+      <Project>{D0C64B1D-51FD-46C6-B60D-33B6D6A0D6DF}</Project>
+      <Name>Blocks.Hierarchy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Blocks.Library.Components\Blocks.Library.Components.csproj">
-      <Project>{20436a06-4527-4338-9807-e6eff87f4338}</Project>
+      <Project>{20436A06-4527-4338-9807-E6EFF87F4338}</Project>
       <Name>Blocks.Library.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Blocks.UI\Blocks.UI.csproj">
-      <Project>{0305b973-047d-4347-a07a-d2cb4c7e64f6}</Project>
-      <Name>Blocks.UI</Name>
+    <ProjectReference Include="..\Blocks.Systems.Physics\Blocks.Systems.Physics.csproj">
+      <Project>{a314883b-901e-408c-99dc-23e4453755e5}</Project>
+      <Name>Blocks.Systems.Physics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.Systems.Rendering\Blocks.Systems.Rendering.csproj">
+      <Project>{c12e5919-1b8c-4ea9-9a0c-0b6c1db6ba26}</Project>
+      <Name>Blocks.Systems.Rendering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.Systems.Transform\Blocks.Systems.Transform.csproj">
+      <Project>{A6E6A819-EEF5-499F-93E6-035DE5F64006}</Project>
+      <Name>Blocks.Systems.Transform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blocks.Utils\Blocks.Utils.csproj">
+      <Project>{f64b7839-fdf4-4c4c-882c-7b9b39d94f28}</Project>
+      <Name>Blocks.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

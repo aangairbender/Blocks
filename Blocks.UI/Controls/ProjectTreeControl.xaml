@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Blocks.UI.Controls.ProjectTreeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Blocks.UI.Controls"
+             xmlns:b="clr-namespace:Blocks.Core;assembly=Blocks.Core..NETFramework,Version=v4.6.1"
+             xmlns:pt="http://propertytools.org/wpf"
+             xmlns:core="clr-namespace:Blocks.Core;assembly=Blocks.Core"
+             mc:Ignorable="d">
+    <StackPanel Margin="10">
+        <TextBlock Text="Project structure:"/>
+        <pt:TreeListBox
+            x:Name="ProjectStructure"
+            HierarchySource="{Binding Blocks}"
+            SelectionChanged="SelectedBlockChangedHandler"
+            pt:TreeListBoxDragDropHelper.IsDragSource="True"
+            pt:TreeListBoxDragDropHelper.IsDropTarget="True"
+            BorderThickness="0"
+            Indentation="12"
+            KeyDown="TreeViewKeyDown">
+            <pt:TreeListBox.ItemTemplate>
+                <DataTemplate DataType="local:NodeViewModel">
+                    <Grid>
+                        <pt:EditableTextBlock Text="{Binding Name}" IsEditing="{Binding IsEditing}">
+                            <pt:EditableTextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Add new block" Click="MenuItem_OnClick2"/>
+                                    <MenuItem Header="Duplicate" Click="MenuItem_OnClick3"/>
+                                    <Separator/>
+                                    <MenuItem Header="Add component">
+                                        <MenuItem Header="Rendering">
+                                            <MenuItem Header="Sphere Renderer" Click="AddSphereRendererHandler"/>
+                                            <MenuItem Header="Box Renderer" Click="AddBoxRendererHandler"/>
+                                        </MenuItem>
+                                        <MenuItem Header="Physics">
+                                            <MenuItem Header="Rigid Body" Click="AddRigidbodyComponent"/>
+                                        </MenuItem>
+                                    </MenuItem>
+                                    <Separator/>
+                                    <MenuItem Header="Delete" Click="MenuItem_OnClick"/>
+                                </ContextMenu>
+                            </pt:EditableTextBlock.ContextMenu>
+                        </pt:EditableTextBlock>
+                    </Grid>
+                </DataTemplate>
+            </pt:TreeListBox.ItemTemplate>
+        </pt:TreeListBox>
+    </StackPanel>
+</UserControl>

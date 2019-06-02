@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Blocks
+namespace Blocks.UI.Windows
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для CreateProjectWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CreateProjectWindow : Window
     {
-        public MainWindow()
+        public CreateProjectWindow()
         {
             InitializeComponent();
         }
